@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"log/slog"
+	"time"
 
 	"10.1.20.130/dropping/log-management/pkg/dto"
 	"github.com/rs/zerolog"
@@ -21,7 +22,7 @@ type (
 )
 
 func NewLogSubscriberService(logger zerolog.Logger, provider *sdklog.LoggerProvider) LogSubscriberService {
-	otelLogger := otelslog.NewLogger("demo-app", otelslog.WithLoggerProvider(provider))
+	otelLogger := otelslog.NewLogger("main-logger", otelslog.WithLoggerProvider(provider))
 	return &logSubscriberService{
 		logger:     logger,
 		otelLogger: otelLogger,
@@ -29,18 +30,25 @@ func NewLogSubscriberService(logger zerolog.Logger, provider *sdklog.LoggerProvi
 }
 
 func (l *logSubscriberService) SendLog(msg dto.LogMessage) error {
+	localTime := time.Now().Format(time.RFC3339)
 	switch msg.Type {
 	case "INFO":
 		l.otelLogger.InfoContext(context.Background(), msg.Msg,
 			slog.String("service.name", msg.Service),
+			slog.String("protocol", msg.Protocol),
+			slog.String("local_time", localTime),
 		)
 	case "WARN":
 		l.otelLogger.WarnContext(context.Background(), msg.Msg,
 			slog.String("service.name", msg.Service),
+			slog.String("protocol", msg.Protocol),
+			slog.String("local_time", localTime),
 		)
 	case "ERR":
 		l.otelLogger.ErrorContext(context.Background(), msg.Msg,
 			slog.String("service.name", msg.Service),
+			slog.String("protocol", msg.Protocol),
+			slog.String("local_time", localTime),
 		)
 	}
 	return nil

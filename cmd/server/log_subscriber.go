@@ -52,9 +52,6 @@ func (s *LogSubscriber) Run(ctx context.Context) {
 		}
 
 		_, err = logCons.Consume(func(msg jetstream.Msg) {
-			logger.Info().
-				Str("subject", msg.Subject()).
-				Msgf("Received message: %s", string(msg.Data()))
 			go func() {
 				sl.LogHandler(msg)
 				msg.Ack()
