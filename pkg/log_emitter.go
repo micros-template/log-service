@@ -31,7 +31,7 @@ func NewLogEmitter(js jetstream.JetStream, logger zerolog.Logger, streamName, st
 	}
 	_, err := js.CreateOrUpdateStream(context.Background(), *cfg)
 	if err != nil {
-		logger.Fatal().Err(err).Msg("Failed to create or update JetStream Event Bus stream")
+		logger.Fatal().Err(err).Msg("Failed to create or update JetStream Log Stream")
 	}
 	subject := subjectPrefix
 	return &logEmitter{js: js, subject: subject, logger: logger}
