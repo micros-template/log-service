@@ -1,0 +1,47 @@
+package service
+
+import (
+	"context"
+	"log/slog"
+
+	"10.1.20.130/dropping/log-management/internal/domain/dto"
+	"github.com/rs/zerolog"
+	"go.opentelemetry.io/contrib/bridges/otelslog"
+	sdklog "go.opentelemetry.io/otel/sdk/log"
+)
+
+type (
+	LogSubscriberService interface {
+		SendLog(msg dto.LogMessage) error
+	}
+	logSubscriberService struct {
+		logger     zerolog.Logger
+		otelLogger *slog.Logger
+	}
+)
+
+func NewLogSubscriberService(logger zerolog.Logger, provider *sdklog.LoggerProvider) LogSubscriberService {
+	otelLogger := otelslog.NewLogger("demo-app", otelslog.WithLoggerProvider(provider))
+	return &logSubscriberService{
+		logger:     logger,
+		otelLogger: otelLogger,
+	}
+}
+
+func (l *logSubscriberService) SendLog(msg dto.LogMessage) error {
+	switch msg.Type {
+	case "INFO":
+		l.otelLogger.InfoContext(context.Background(), msg.Msg,
+			slog.String("service.name", msg.Service),
+		)
+	case "WARN":
+		l.otelLogger.WarnContext(context.Background(), msg.Msg,
+			slog.String("service.name", msg.Service),
+		)
+	case "Err":
+		l.otelLogger.ErrorContext(context.Background(), msg.Msg,
+			slog.String("service.name", msg.Service),
+		)
+	}
+	return nil
+}
