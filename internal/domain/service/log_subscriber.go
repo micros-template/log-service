@@ -38,7 +38,7 @@ func (l *logSubscriberService) SendLog(msg dto.LogMessage) error {
 		l.otelLogger.WarnContext(context.Background(), msg.Msg,
 			slog.String("service.name", msg.Service),
 		)
-	case "Err":
+	case "ERR":
 		l.otelLogger.ErrorContext(context.Background(), msg.Msg,
 			slog.String("service.name", msg.Service),
 		)
