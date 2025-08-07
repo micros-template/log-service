@@ -4,7 +4,7 @@ import (
 	"context"
 	"log/slog"
 
-	"10.1.20.130/dropping/log-management/internal/domain/dto"
+	"10.1.20.130/dropping/log-management/pkg/dto"
 	"github.com/rs/zerolog"
 	"go.opentelemetry.io/contrib/bridges/otelslog"
 	sdklog "go.opentelemetry.io/otel/sdk/log"

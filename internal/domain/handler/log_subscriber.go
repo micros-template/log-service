@@ -3,8 +3,8 @@ package handler
 import (
 	"encoding/json"
 
-	"10.1.20.130/dropping/log-management/internal/domain/dto"
 	"10.1.20.130/dropping/log-management/internal/domain/service"
+	"10.1.20.130/dropping/log-management/pkg/dto"
 	"github.com/nats-io/nats.go/jetstream"
 	"github.com/rs/zerolog"
 )
