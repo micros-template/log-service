@@ -50,6 +50,12 @@ func (l *logSubscriberService) SendLog(msg dto.LogMessage) error {
 			slog.String("protocol", msg.Protocol),
 			slog.String("local_time", localTime),
 		)
+	default:
+		l.otelLogger.DebugContext(context.Background(), msg.Msg,
+			slog.String("service.name", msg.Service),
+			slog.String("protocol", msg.Protocol),
+			slog.String("local_time", localTime),
+		)
 	}
 	return nil
 }
