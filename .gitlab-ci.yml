@@ -1,0 +1,57 @@
+stages:
+  - lint
+  - build
+  - post-pipeline
+  # - deploy
+
+staticcheck:
+  stage: lint
+  image: golang:1.24-alpine3.22
+  script:
+    - apk add --no-cache git
+    - go env -w GOPRIVATE="10.1.20.130/*"
+    - go env -w GOINSECURE="10.1.20.130/*"
+    - git config --global url."http://$DROPPING_READ_TOKEN@10.1.20.130/".insteadOf "https://10.1.20.130/"
+    - go install honnef.co/go/tools/cmd/staticcheck@latest
+    - staticcheck ./...
+
+image_build:
+  stage: build
+  image: golang:1.24-alpine3.22
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  before_script:
+    - apk add --no-cache docker git
+    - go env -w GOPRIVATE="10.1.20.130/*"
+    - go env -w GOINSECURE="10.1.20.130/*"
+    - git config --global url."http://$DROPPING_READ_TOKEN@10.1.20.130/".insteadOf "https://10.1.20.130/"
+  script:
+    - chmod +x ./bin/build.sh
+    - ./bin/build.sh
+
+update_version:
+  stage: post-pipeline
+  image: alpine:latest
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  before_script:
+    - apk add --no-cache git yq
+  script:
+    - VERSION=$(cat VERSION)
+    - git clone http://$DROPPING_VERSIONING_TOKEN@10.1.20.130/dropping/versioning.git/
+    - cd versioning
+    - yq e '.["log_service_version"] = "'$VERSION'"' -i version.yaml
+    - git config user.email "ci@local"
+    - git config user.name "CI Bot"
+    - git add version.yaml
+    - git diff --cached --quiet || git commit -m "Update log_service_version to $VERSION"
+    - git push http://$CI_PROJECT_ROOT_NAMESPACE:$DROPPING_VERSIONING_TOKEN@10.1.20.130/dropping/versioning.git HEAD:main
+
+deployment:
+  stage: deploy
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  trigger:
+    project: "$CI_PROJECT_NAMESPACE/deployment"
+    branch: main
+    strategy: depend
