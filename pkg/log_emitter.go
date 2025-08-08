@@ -12,7 +12,7 @@ import (
 
 type (
 	LogEmitter interface {
-		EmitLog(ctx context.Context, msg dto.LogMessage)
+		EmitLog(ctx context.Context, msg dto.LogMessage) error
 	}
 	logEmitter struct {
 		subject string
@@ -37,13 +37,16 @@ func NewLogEmitter(js jetstream.JetStream, logger zerolog.Logger, streamName, st
 	return &logEmitter{js: js, subject: subject, logger: logger}
 }
 
-func (l *logEmitter) EmitLog(ctx context.Context, msg dto.LogMessage) {
+func (l *logEmitter) EmitLog(ctx context.Context, msg dto.LogMessage) error {
 	marshalledMsg, err := json.Marshal(msg)
 	if err != nil {
-
+		l.logger.Error().Err(err)
+		return err
 	}
 	sub := fmt.Sprintf("%s.%s", l.subject, msg.Service)
 	if _, err := l.js.Publish(ctx, sub, marshalledMsg); err != nil {
 		l.logger.Error().Err(err).Msg("failed to publish message")
+		return err
 	}
+	return nil
 }
