@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
-	"10.1.20.130/dropping/log-management/internal/domain/handler"
-	mq "10.1.20.130/dropping/log-management/internal/infrastructure/message-queue"
+	"github.com/micros-template/log-service/internal/domain/handler"
+	mq "github.com/micros-template/log-service/internal/infrastructure/message-queue"
 	"github.com/nats-io/nats.go"
 	"github.com/nats-io/nats.go/jetstream"
 	"github.com/rs/zerolog"

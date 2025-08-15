@@ -1,4 +1,4 @@
-module 10.1.20.130/dropping/log-management
+module github.com/micros-template/log-service
 
 go 1.24.2
 

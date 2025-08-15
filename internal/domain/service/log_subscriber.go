@@ -5,7 +5,7 @@ import (
 	"log/slog"
 	"time"
 
-	"10.1.20.130/dropping/log-management/pkg/dto"
+	"github.com/micros-template/log-service/pkg/dto"
 	"github.com/rs/zerolog"
 	"go.opentelemetry.io/contrib/bridges/otelslog"
 	sdklog "go.opentelemetry.io/otel/sdk/log"

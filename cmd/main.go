@@ -6,8 +6,8 @@ import (
 	"os/signal"
 	"syscall"
 
-	"10.1.20.130/dropping/log-management/cmd/bootstrap"
-	"10.1.20.130/dropping/log-management/cmd/server"
+	"github.com/micros-template/log-service/cmd/bootstrap"
+	"github.com/micros-template/log-service/cmd/server"
 )
 
 func main() {

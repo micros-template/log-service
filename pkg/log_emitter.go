@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"10.1.20.130/dropping/log-management/pkg/dto"
+	"github.com/micros-template/log-service/pkg/dto"
 	"github.com/nats-io/nats.go/jetstream"
 	"github.com/rs/zerolog"
 )

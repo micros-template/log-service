@@ -1,12 +1,12 @@
 package di
 
 import (
-	"10.1.20.130/dropping/log-management/config/logger"
-	mq "10.1.20.130/dropping/log-management/config/message-queue"
-	"10.1.20.130/dropping/log-management/config/otellog"
-	"10.1.20.130/dropping/log-management/internal/domain/handler"
-	"10.1.20.130/dropping/log-management/internal/domain/service"
-	_mq "10.1.20.130/dropping/log-management/internal/infrastructure/message-queue"
+	"github.com/micros-template/log-service/config/logger"
+	mq "github.com/micros-template/log-service/config/message-queue"
+	"github.com/micros-template/log-service/config/otellog"
+	"github.com/micros-template/log-service/internal/domain/handler"
+	"github.com/micros-template/log-service/internal/domain/service"
+	_mq "github.com/micros-template/log-service/internal/infrastructure/message-queue"
 	"github.com/nats-io/nats.go/jetstream"
 	"go.uber.org/dig"
 )

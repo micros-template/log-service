@@ -3,7 +3,7 @@ package mocks
 import (
 	"context"
 
-	"10.1.20.130/dropping/log-management/pkg/dto"
+	"github.com/micros-template/log-service/pkg/dto"
 
 	"github.com/stretchr/testify/mock"
 )
